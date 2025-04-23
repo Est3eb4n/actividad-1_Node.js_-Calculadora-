@@ -1,58 +1,63 @@
-function sumar(n1,n2){
-    return n1+n2;
+// operation.js
+let currentValue = '';
+let storedValue = '';
+let currentOperation = null;
+
+function sumar(n1, n2) {
+    return n1 + n2;
 }
 
-function restar(n1,n2){
-    return n1-n2;
+function restar(n1, n2) {
+    return n1 - n2;
 }
 
-function multi(n1,n2){
-    return n1-n2;
+function multi(n1, n2) {
+    return n1 * n2;
 }
 
-function divition(n1,n2){
-    return n1-n2;
+function division(n1, n2) {
+    return n1 / n2;
 }
 
-function display(value){
-    document.getElementById('display').value +=value;
+function appendToDisplay(value) {
+    currentValue += value;
+    return currentValue;
 }
 
-function clearDisplay(){
-    documen.getElementById('result').value = '';
+function clearDisplay() {
+    currentValue = '';
+    storedValue = '';
+    currentOperation = null;
+    return '0';
 }
 
 function backspace() {
-    let display = document.getElementById('result');
-    display.value = display.value.slice(0, -1);
+    currentValue = currentValue.slice(0, -1);
+    return currentValue || '0';
 }
 
-async function calculate() {
-    const expression = document.getElementById('result').value;
+function calculate() {
+    if (!storedValue || !currentOperation) return currentValue;
     
-    try {
-        const response = await fetch('/calculate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ expression })
-        });
-        
-        const data = await response.json();
-        
-        if (data.error) {
-            document.getElementById('result').value = 'Error';
-        } else {
-            document.getElementById('result').value = data.result;
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('result').value = 'Error';
+    const num1 = parseFloat(storedValue);
+    const num2 = parseFloat(currentValue);
+    
+    let result;
+    switch(currentOperation) {
+        case '+': result = sumar(num1, num2); break;
+        case '-': result = restar(num1, num2); break;
+        case '*': result = multi(num1, num2); break;
+        case '/': result = division(num1, num2); break;
+        default: return currentValue;
     }
+    
+    currentValue = result.toString();
+    storedValue = '';
+    currentOperation = null;
+    return currentValue;
 }
 
-// Luego se exportan los elementos delarados
-
-
-export {sumar, restar, multi, divition, display, clearDisplay, backspace, calculate}
+export {
+    sumar, restar, multi, division,
+    appendToDisplay, clearDisplay, backspace, calculate
+}
