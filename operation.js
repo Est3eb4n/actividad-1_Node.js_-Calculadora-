@@ -35,6 +35,18 @@ function backspace() {
     currentValue = currentValue.slice(0, -1);
     return currentValue || '0';
 }
+function setOperation(operation){
+    if (currentValue === '')return;
+
+    if (storedValue !== ''){
+        calculate();
+    }
+
+    storedValue = currentValue;
+    currentValue = '';
+    currentOperation = operation;
+    return storedValue;
+}
 
 function calculate() {
     if (!storedValue || !currentOperation) return currentValue;
@@ -42,6 +54,11 @@ function calculate() {
     const num1 = parseFloat(storedValue);
     const num2 = parseFloat(currentValue);
     
+    if(currentOperation === '/' && num2 === 0){
+        clearDisplay();
+        return 'Error';
+    }
+
     let result;
     switch(currentOperation) {
         case '+': result = sumar(num1, num2); break;
@@ -55,9 +72,14 @@ function calculate() {
     storedValue = '';
     currentOperation = null;
     return currentValue;
+    
 }
 
 export {
-    sumar, restar, multi, division,
-    appendToDisplay, clearDisplay, backspace, calculate
+    sumar, restar, 
+    multi, division,
+    appendToDisplay, clearDisplay, 
+    backspace, calculate,
+    setOperation,
+
 }

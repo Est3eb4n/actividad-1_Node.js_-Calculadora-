@@ -1,5 +1,6 @@
 import { 
     appendToDisplay, 
+    setOperation,
     clearDisplay, 
     backspace, 
     calculate 
@@ -9,8 +10,14 @@ import {
 document.querySelectorAll('.display').forEach(button => {
     button.addEventListener('click', (event) => {
         const value = event.target.innerText;
-        const result = appendToDisplay(value);
-        document.getElementById('result').value = result;
+        document.getElementById('result').value = appendToDisplay(value);
+    });
+});
+
+document.querySelectorAll('.operator').forEach(button=>{
+    button.addEventListener('click', (event) => {
+        const operation = event.target.innerText;
+        document.getElementById('result').value = setOperation(operation);
     });
 });
 
